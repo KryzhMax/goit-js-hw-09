@@ -15,7 +15,7 @@ const elementsRef = {
 const { dataDays, dataHours, dataMinutes, dataSeconds } = elementsRef;
 
 let timeId = null;
-toDisableBtn(btnRef, true);
+toDisableBtn(btnRef);
 
 const options = {
   enableTime: true,
@@ -26,7 +26,7 @@ const options = {
     if (selectedDates[0].getTime() < Date.now()) {
       return Notify.failure('Please choose a date in the future');
     }
-    toDisableBtn(btnRef, false);
+    toDisableBtn(btnRef);
   },
 };
 
@@ -35,13 +35,9 @@ const flatPickrInput = flatpickr(inputRef, options);
 
 function renderTimer() {
   const remainingTime = remainingTimer(
-    flatPickrInput.selectedDates[0].getTime(),
-    toDisableBtn(inputRef, true)
+    flatPickrInput.selectedDates[0].getTime()
   );
-
-  if (remainingTime < 1000) {
-    clearInterval(timeId);
-  }
+  console.log(remainingTime)
 
   dataDays.textContent = addPadString(convertMs(remainingTime).days);
   dataHours.textContent = addPadString(convertMs(remainingTime).hours);
@@ -53,14 +49,22 @@ const remainingTimer = time => {
   return time - Date.now();
 };
 
-function toDisableBtn(btn, status) {
-  btn.disabled = status;
+function toDisableBtn(btn) {
+  btn.disabled = !btn.disabled;
 }
 
 function onBtn() {
-  toDisableBtn(btnRef, true);
+  const remainingTime = remainingTimer(
+    flatPickrInput.selectedDates[0].getTime()
+  );
+  toDisableBtn(btnRef);
+  toDisableBtn(inputRef);
   Notify.success('choco-laca Boom-Boom');
   timeId = setInterval(renderTimer, 1000);
+  setTimeout(() => {
+    clearInterval(timeId);
+    toDisableBtn(inputRef);
+  }, remainingTime);
 }
 
 function convertMs(ms) {
