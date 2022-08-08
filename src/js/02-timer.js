@@ -35,7 +35,8 @@ const flatPickrInput = flatpickr(inputRef, options);
 
 function renderTimer() {
   const remainingTime = remainingTimer(
-    flatPickrInput.selectedDates[0].getTime()
+    flatPickrInput.selectedDates[0].getTime(),
+    toDisableBtn(inputRef, true)
   );
 
   if (remainingTime < 1000) {

@@ -15,9 +15,10 @@ const { formRef, delayRef, stepRef, amountRef } = refs;
 function addAmount(event) {
   event.preventDefault();
 
-  let DELAY = delayRef.value;
-  let STEP = stepRef.value;
-  for (let i = 0; i < amountRef.value; i++) {
+  let DELAY = Number(delayRef.value);
+  let STEP = Number(stepRef.value);
+  for (let i = 1; i <= amountRef.value; i++) {
+    DELAY += STEP;
     createPromise(i, DELAY)
       .then(({ position, delay }) => {
         Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
