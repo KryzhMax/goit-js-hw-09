@@ -18,7 +18,6 @@ function addAmount(event) {
   let DELAY = Number(delayRef.value);
   let STEP = Number(stepRef.value);
   for (let i = 1; i <= amountRef.value; i++) {
-    DELAY += STEP;
     createPromise(i, DELAY)
       .then(({ position, delay }) => {
         Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
@@ -26,7 +25,9 @@ function addAmount(event) {
       .catch(({ position, delay }) => {
         Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
       });
+    DELAY += STEP;
   }
+  event.currentTarget.reset();
 }
 
 function createPromise(position, delay) {
